@@ -1,56 +1,79 @@
-
-require "bowling_game_kata.rb"
+require "bowling_game_kata"
 
 describe BowlingGameKata do
 
   before do
-    @bowling_game = BowlingGameKata.new()
+    @bowling_game_kata = BowlingGameKata.new
   end
 
-  def play_rolls(number_of_rolls, amount)
-    number_of_rolls.times do
-      @bowling_game.roll(amount)
+  def play_rounds(number_of_rounds, roll_amount)
+    number_of_rounds.times do
+      @bowling_game_kata.roll(roll_amount)
     end
   end
 
-  def roll_strike()
-    @bowling_game.roll(10)
-  end
+  context "Scoring" do
 
-  def roll_spare()
-    play_rolls(2,5)
-  end
+    context "a game of all 0s" do
 
-  it "scores a game of all 0s as 0" do
-    play_rolls(20,0)
-    expect(@bowling_game.score()).to eq 0
-  end
+      before do
+        play_rounds(20,0)
+      end
 
-  it "scores a game of all 1s as 20" do
-    play_rolls(20,1)
-    expect(@bowling_game.score()).to eq 20
-  end
+      it "#score returns 0" do
+        expect(@bowling_game_kata.score).to eq 0
+      end
 
-  it "scores a game of all 4s as 80" do
-    play_rolls(20,4)
-    expect(@bowling_game.score()).to eq 80
-  end
+    end
 
-  it "scores a game with a spare in the first frame" do
-    roll_spare
-    play_rolls(18,1)
-    expect(@bowling_game.score()).to eq 29
-  end
+    context "a game of all 1s" do
+      before do
+        play_rounds(20,1)
+      end
 
-  it "scores a game with a strike in the first frame" do
-    roll_strike
-    play_rolls(18,1)
-    expect(@bowling_game.score()).to eql 30
-  end
+      it "#score returns 20" do
+        expect(@bowling_game_kata.score).to eq 20
+      end
 
-  it "scores a perfect game of 300" do
-    play_rolls(12,10)
-    expect(@bowling_game.score()).to eql 300
-  end
+    end
 
+    context "a game of one spare" do
+
+      before do
+        play_rounds(2,5)
+        play_rounds(18,1)
+      end
+
+      it "#score returns 29" do
+        expect(@bowling_game_kata.score).to eq 29
+      end
+
+    end
+
+    context "a game of one strike" do
+
+      before do
+        play_rounds(1,10)
+        play_rounds(18,1)
+      end
+
+      it "#score returns 30" do
+        expect(@bowling_game_kata.score).to eq 30
+      end
+
+    end
+
+
+    context "a perfect game" do
+
+      before do
+        play_rounds(12,10)
+      end
+
+      it "#score returns 300" do
+        expect(@bowling_game_kata.score).to eq 300
+      end
+    end
+
+  end
 end
